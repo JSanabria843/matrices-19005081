@@ -121,6 +121,67 @@ Funcionalidad:
 
 2. Desarrolla una función llamada “multiplicar(matrizA,matrizB)” 
 
+2.1. Condición Inicial: La cantidad de columnas de la primera tabla debe coincidir con la
+cantidad de filas de la segunda tabla. Si no cumplen esta condición, el programa debe
+mostrar un mensaje en consola que indique que las tablas no son compatibles para la
+operación y la función debe retornar un arreglo vacío.
+
+![error multiplicacin](https://github.com/user-attachments/assets/67dd9a36-54ce-4d16-a20d-d589624b848a)
+
+
+2.2. Combinación de Valores:
+
+![multiplicacioncorrecta](https://github.com/user-attachments/assets/2d505de0-b084-4823-a0ef-0c27b5243662)
+
+![3](https://github.com/user-attachments/assets/8eb66889-f3de-44fc-b9c6-49a980ff75bb)
+
+Primero declaramos la función multiplicarMatrices como asíncrona. 
+Luego obtenemos los valoresque ingresa el usuario. 
+Una vez tenemos estos valores convertimos las matridces de texto en arreglos bidimensionales. 
+Cuando esto ya se haya realizado enviamos las matrices al servidor
+Convertimos la respuesta del servidor en un objeto de JavaScript.
+Luego mostramos el resultado o manejamos los errores con nuestro ciclo if.  
+
+
+Server.js
+
+![4](https://github.com/user-attachments/assets/4cc0a9bd-44d2-4df4-b179-f5eb32f59145)
+
+const express = require('express'): Importa el framework Express, que permite manejar rutas, peticiones HTTP y respuestas de manera sencilla.
+const app = express(): Crea una instancia de la aplicación de Express.
+const path = require('path'): Importa el módulo path, que facilita manejar rutas de archivos.
+const port = 3000: Define el puerto en el que se ejecutará el servidor (puedes acceder al servidor en http://localhost:3000).
+app.use(express.json()); Este middleware permite que el servidor parsee (interprete) el cuerpo de las peticiones HTTP en formato JSON.
+app.use(express.static(path.join(__dirname, 'public'))); express.static(): Permite servir archivos estáticos (HTML, CSS, JS, imágenes, etc.).
+path.join(__dirname, 'public'):
+__dirname: Ruta actual del archivo.
+'public': Es la carpeta donde estarán tus archivos de frontend.
+La función multiply realiza la multiplicación de dos matrices dadas. 
+  if (colsA !== rowsB) {
+    console.log("Las matrices no son compatibles para la multiplicación.");
+    return [];
+  } Para multiplicar dos matrices:
+El número de columnas de la matriz A debe coincidir con el número de filas de la matriz B.
+Si esta condición no se cumple, la función devuelve un arreglo vacío.
+  for (let i = 0; i < rowsA; i++) {          // Itera sobre las filas de A
+    for (let j = 0; j < colsB; j++) {        // Itera sobre las columnas de B
+      for (let k = 0; k < colsA; k++) {      // Itera sobre columnas de A / filas de B
+        result[i][j] += matrixA[i][k] * matrixB[k][j];
+      }
+    }
+  }
+El servidor recibe las matrices del cliente y devuelve el resultado de la multiplicación.
+app.post('/multiply', (req, res) => {
+  const { matrixA, matrixB } = req.body;
+Validacion del formato:
+   if (!Array.isArray(matrixA) || !Array.isArray(matrixB)) {
+    return res.status(400).json({ error: "Formato de matriz inválido" });
+  }
+Si alguna de las matrices no es un arreglo, el servidor responde con un código 400 (Bad Request).
+Luego llamamos a la función multiply que guarda el resultado si las 2 matrices se pueden multiplicar, si la matriz esta vacia devuelve error, si todo es correcto devuelve el resultado como JSON.
+app.listen(): Inicia el servidor en el puerto 3000.
+El servidor está listo para recibir peticiones en http://localhost:3000.
+
 
 
 
