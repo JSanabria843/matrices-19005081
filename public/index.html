@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiplicación de Matrices</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+    button { padding: 10px 15px; margin-bottom: 10px; }
+    pre { background: #f3f3f3; padding: 10px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Multiplicación de Matrices</h1>
+  <h3>Primera Matriz (A):</h3>
+  <textarea id="matrixA" placeholder="Ejemplo:
+1 2 3
+4 5 6"></textarea>
+
+  <h3>Segunda Matriz (B):</h3>
+  <textarea id="matrixB" placeholder="Ejemplo:
+7 8
+9 10
+11 12"></textarea>
+
+  <button onclick="multiplicarMatrices()">Multiplicar Matrices</button>
+
+  <h2>Resultado:</h2>
+  <pre id="resultado"></pre>
+
+  <script>
+    async function multiplicarMatrices() {
+      const inputA = document.getElementById('matrixA').value.trim();
+      const inputB = document.getElementById('matrixB').value.trim();
+
+      // Convertir texto a matrices
+      const matrixA = inputA.split('\n').map(row => row.trim().split(' ').map(Number));
+      const matrixB = inputB.split('\n').map(row => row.trim().split(' ').map(Number));
+
+      // Enviar matrices al servidor
+      const response = await fetch('/multiply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matrixA, matrixB })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        document.getElementById('resultado').innerText = result.result.map(row => row.join(' ')).join('\n');
+      } else {
+        document.getElementById('resultado').innerText = result.error;
+      }
+    }
+  </script>
+</body>
+</html>
